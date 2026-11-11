@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -142,7 +143,7 @@ public class ItemReward extends Reward {
 			return false;
 		}
 
-		processItems(size, stack -> player.getInventory().placeItemBackInInventory(stack));
+		processItems(size, stack -> player.getInventory().placeItemBackInInventory(stack, Prediction.SERVER_ONLY));
 
 		if (notify) {
 			Server2PlayNetworking.send(player, new NotifyItemRewardMessage(item, size, disableRewardScreenBlur));
