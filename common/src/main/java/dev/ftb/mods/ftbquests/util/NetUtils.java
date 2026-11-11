@@ -15,12 +15,16 @@ import java.util.function.Function;
 
 public class NetUtils {
 	public static <T> void write(FriendlyByteBuf buffer, Collection<T> list, BiConsumer<FriendlyByteBuf, T> writer) {
-		buffer.writeCollection(list, writer::accept);
+		if (list.size() > 65535) throw new IllegalArgumentException("Network collection too large");
+		buffer.writeVarInt(list.size());
+		for (T value : list) writer.accept(buffer, value);
 	}
 
 	public static <T> void read(FriendlyByteBuf buffer, Collection<T> list, Function<FriendlyByteBuf, T> reader) {
 		list.clear();
-		list.addAll(buffer.readList(reader::apply));
+		int size = buffer.readVarInt();
+		if (size < 0 || size > 65535) throw new IllegalArgumentException("Invalid network collection size: " + size);
+		for (int i = 0; i < size; i++) list.add(reader.apply(buffer));
 	}
 
 	public static void writeStrings(FriendlyByteBuf buffer, Collection<String> list) {
