@@ -14,6 +14,7 @@ public class FTBQuestsKeyMappings {
             = new KeyMapping.Category(FTBQuestsAPI.id("keys"));
     public static final KeyMapping KEY_QUESTS
             = input().createKeyMapping(KeyMappingConfig.builder("quests", FTB_QUESTS_KEY_CATEGORY)
+            .keyboard(InputConstants.KEY_K)
             .conflictContext(KeyConflict.IN_GAME)
             .build());
     public static final KeyMapping KEY_CYCLE_PINNED_TRACKER = input().createKeyMapping(
