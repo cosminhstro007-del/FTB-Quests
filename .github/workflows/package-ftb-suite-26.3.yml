@@ -59,6 +59,9 @@ jobs:
       - name: Fix FTB Library SDL keyboard input for Minecraft 26.3
         run: python3 tools/patch-ftb-library-sdl-key-26.3.py _ftb-library
 
+      - name: Fix SDL3 mouse buttons and click coordinates in FTB Library
+        run: python3 tools/patch-ftb-library-sdl-mouse-26.3.py _ftb-library
+
       - name: Build FTB Library (publish dependency locally)
         working-directory: _ftb-library
         run: bash ./gradlew :common:publishToMavenLocal :fabric:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
