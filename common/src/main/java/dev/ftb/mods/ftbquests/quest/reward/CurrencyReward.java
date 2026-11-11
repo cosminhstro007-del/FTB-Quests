@@ -81,7 +81,13 @@ public class CurrencyReward extends Reward {
             return false;
         }
 
-        provider.giveCurrency(player, coinAmount);
+        // The 26.3 currency provider takes an int; split long rewards to prevent overflow.
+        long remaining = coinAmount;
+        while (remaining != 0) {
+            int amount = (int) Math.max(Integer.MIN_VALUE, Math.min(Integer.MAX_VALUE, remaining));
+            provider.giveCurrency(player, amount);
+            remaining -= amount;
+        }
 
         if (notify) {
             Component msg = Component.literal(String.format("%,d", coinAmount)).append(" ").append(provider.coinName(coinAmount > 1));
