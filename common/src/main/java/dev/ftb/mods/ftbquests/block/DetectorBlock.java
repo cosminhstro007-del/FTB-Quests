@@ -1,6 +1,5 @@
 package dev.ftb.mods.ftbquests.block;
 
-import com.mojang.serialization.MapCodec;
 import dev.ftb.mods.ftbquests.block.entity.DetectorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.redstone.Orientation;
 import org.jspecify.annotations.Nullable;
 
 public class DetectorBlock extends BaseEntityBlock {
-	private static final MapCodec<DetectorBlock> CODEC = simpleCodec(DetectorBlock::new);
 
 	public DetectorBlock(BlockBehaviour.Properties props) {
 		super(props);
@@ -31,11 +29,6 @@ public class DetectorBlock extends BaseEntityBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
 		return new DetectorBlockEntity(blockPos, blockState);
-	}
-
-	@Override
-	protected MapCodec<DetectorBlock> codec() {
-		return CODEC;
 	}
 
 	@Override
