@@ -47,11 +47,11 @@ jobs:
 
       - name: Build and publish FTB Library to local Maven
         working-directory: _ftb-library
-        run: bash ./gradlew :common:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
+        run: bash ./gradlew :common:publishToMavenLocal :fabric:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
 
       - name: Build and publish FTB Teams to local Maven
         working-directory: _ftb-teams
-        run: bash ./gradlew :common:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
+        run: bash ./gradlew :common:publishToMavenLocal :fabric:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
 
       - name: Compile FTB Quests for NeoForge 26.3
         run: bash ./gradlew :neoforge:classes :neoforge:jar --no-daemon --stacktrace --console=plain
