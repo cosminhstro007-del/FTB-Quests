@@ -62,3 +62,19 @@ patch("client/gui/MenuScreenWrapper.java", [
     ("wrappedGui.mouseReleased(MouseButton.get(event.button()));",
      "wrappedGui.mouseReleased(MouseButton.fromSDL(event.button()));")
 ])
+
+# SDL mouse state is a bitmask indexed by raw 1-based SDL button IDs.
+# The existing FTB Widget implementation incorrectly shifts by (legacyId - 1),
+# so dragging the left mouse button tests bit 31 instead of SDL bit 0.
+patch("client/gui/widget/Widget.java", [(
+    """        int mask = 1 << (button.id - 1);""",
+    """        int sdlId = switch (button.id) {
+            case 0 -> 1; // logical left -> SDL left
+            case 1 -> 3; // logical right -> SDL right
+            case 2 -> 2; // logical middle -> SDL middle
+            case 3 -> 4; // logical back -> SDL X1
+            case 4 -> 5; // logical next -> SDL X2
+            default -> button.id;
+        };
+        int mask = sdlId >= 1 && sdlId <= 32 ? 1 << (sdlId - 1) : 0;"""
+)])
