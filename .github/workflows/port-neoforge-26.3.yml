@@ -13,6 +13,8 @@ jobs:
   neoforge-compile:
     runs-on: ubuntu-latest
     timeout-minutes: 50
+    env:
+      SNAPSHOT: 'true'
     steps:
       - name: Checkout FTB Quests port
         uses: actions/checkout@v4
