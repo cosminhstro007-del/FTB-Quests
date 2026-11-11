@@ -1,8 +1,5 @@
 package dev.ftb.mods.ftbquests.block;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.ftb.mods.ftblibrary.platform.network.Server2PlayNetworking;
 import dev.ftb.mods.ftbquests.FTBQuestsPlatform;
 import dev.ftb.mods.ftbquests.block.entity.ITaskScreen;
@@ -40,11 +37,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 public class TaskScreenBlock extends BaseEntityBlock {
-    private static final MapCodec<TaskScreenBlock> CODEC = RecordCodecBuilder.mapCodec(instance ->
-            instance.group(propertiesCodec())
-                    .and(Codec.INT.fieldOf("size").forGetter(TaskScreenBlock::getSize))
-                    .apply(instance, TaskScreenBlock::new)
-    );
 
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
@@ -76,11 +68,6 @@ public class TaskScreenBlock extends BaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return FTBQuestsPlatform.get().taskScreenBlockEntityProvider().create(blockPos, blockState);
-    }
-
-    @Override
-    protected MapCodec<? extends TaskScreenBlock> codec() {
-        return CODEC;
     }
 
     @Override
@@ -170,7 +157,6 @@ public class TaskScreenBlock extends BaseEntityBlock {
     }
 
     public static class Aux extends TaskScreenBlock {
-        private static final MapCodec<Aux> CODEC = simpleCodec(Aux::new);
 
         public Aux(Properties props) {
             super(props, 0);
@@ -179,11 +165,6 @@ public class TaskScreenBlock extends BaseEntityBlock {
         @Override
         public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
             return FTBQuestsPlatform.get().taskScreenAuxBlockEntityProvider().create(blockPos, blockState);
-        }
-
-        @Override
-        protected MapCodec<Aux> codec() {
-            return CODEC;
         }
     }
 }
