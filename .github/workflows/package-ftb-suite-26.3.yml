@@ -1,9 +1,9 @@
-name: Build complete FTB 26.3 NeoForge mods folder
+name: FL0X FTB 26.3 keyboard fix and full mods bundle
 
 on:
   push:
     branches:
-      - package/ftb-suite-neoforge-26.3
+      - fix/quests-keyboard-26.3
   workflow_dispatch:
 
 permissions:
@@ -56,6 +56,9 @@ jobs:
       - name: Configure Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Fix FTB Library SDL keyboard input for Minecraft 26.3
+        run: python3 tools/patch-ftb-library-sdl-key-26.3.py _ftb-library
+
       - name: Build FTB Library (publish dependency locally)
         working-directory: _ftb-library
         run: bash ./gradlew :common:publishToMavenLocal :fabric:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
@@ -84,6 +87,6 @@ jobs:
       - name: Upload one complete FTB 26.3 mods ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: FL0X_FTB_NeoForge_26.3_ALL_5_MODS
+          name: FL0X_FTB_26.3_KEYBOARD_FIX_ALL_5_MODS
           path: FL0X_FTB_26_3/
           if-no-files-found: error
