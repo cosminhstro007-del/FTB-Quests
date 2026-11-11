@@ -9,6 +9,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.Prediction;
 
 public record GiveItemToPlayerMessage(ItemStack stack) implements CustomPacketPayload {
 	public static final Type<GiveItemToPlayerMessage> TYPE = new Type<>(FTBQuestsAPI.id("give_item_to_player"));
@@ -26,7 +27,7 @@ public record GiveItemToPlayerMessage(ItemStack stack) implements CustomPacketPa
 	public static void handle(GiveItemToPlayerMessage message, PacketContext context) {
 		ServerPlayer player = (ServerPlayer) context.player();
 		if (PermissionsHelper.hasEditorPermission(player)) {
-			player.getInventory().placeItemBackInInventory(message.stack.copy());
+			player.getInventory().placeItemBackInInventory(message.stack.copy(), Prediction.SERVER_ONLY);
 			player.sendSystemMessage(Component.translatable("ftbquests.task.gave_item", message.stack.toString()));
 		}
 	}
