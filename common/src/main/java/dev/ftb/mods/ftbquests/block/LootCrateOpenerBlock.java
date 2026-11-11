@@ -1,6 +1,5 @@
 package dev.ftb.mods.ftbquests.block;
 
-import com.mojang.serialization.MapCodec;
 import dev.ftb.mods.ftbquests.FTBQuestsPlatform;
 import dev.ftb.mods.ftbquests.block.entity.LootCrateOpenerBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -18,7 +17,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 public class LootCrateOpenerBlock extends BaseEntityBlock {
-    private static final MapCodec<LootCrateOpenerBlock> CODEC = simpleCodec(LootCrateOpenerBlock::new);
 
     public LootCrateOpenerBlock(Properties props) {
         super(props);
@@ -28,11 +26,6 @@ public class LootCrateOpenerBlock extends BaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return FTBQuestsPlatform.get().lootCrateBlockEntityProvider().create(blockPos, blockState);
-    }
-
-    @Override
-    protected MapCodec<LootCrateOpenerBlock> codec() {
-        return CODEC;
     }
 
     @Override
