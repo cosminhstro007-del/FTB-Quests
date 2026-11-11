@@ -436,7 +436,7 @@ public class MultilineTextEditorScreen extends BaseScreen {
 	}
 
 	private void insertFormatting(ChatFormatting c) {
-		insertFormatting(String.valueOf(c.getChar()));
+		insertFormatting(c.toString().substring(1));
 	}
 
 	private void insertFormatting(EditableColor color) {
@@ -630,8 +630,8 @@ public class MultilineTextEditorScreen extends BaseScreen {
 			List<ContextMenuItem> items = new ArrayList<>();
 
 			for (ChatFormatting cf : ChatFormatting.values()) {
-				if (cf.getColor() != null) {
-					items.add(new ContextMenuItem(Component.empty(), Color4I.rgb(cf.getColor()), _ -> insertFormatting(cf)));
+				if (net.minecraft.network.chat.TextColor.fromLegacyFormat(cf) != null) {
+					items.add(new ContextMenuItem(Component.empty(), Color4I.rgb(net.minecraft.network.chat.TextColor.fromLegacyFormat(cf).getValue()), _ -> insertFormatting(cf)));
 				}
 			}
 
