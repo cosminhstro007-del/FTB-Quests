@@ -1,6 +1,5 @@
 package dev.ftb.mods.ftbquests.block;
 
-import com.mojang.serialization.MapCodec;
 import dev.ftb.mods.ftblibrary.platform.network.Server2PlayNetworking;
 import dev.ftb.mods.ftbquests.FTBQuestsPlatform;
 import dev.ftb.mods.ftbquests.block.entity.BaseBarrierBlockEntity;
@@ -48,7 +47,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class QuestBarrierBlock extends BaseEntityBlock {
-	private static final MapCodec<QuestBarrierBlock> CODEC = simpleCodec(QuestBarrierBlock::new);
 
 	public static final BooleanProperty OPEN = BooleanProperty.create("open");
 
@@ -56,7 +54,7 @@ public class QuestBarrierBlock extends BaseEntityBlock {
 		return Properties.of()
 				.setId(key)
 				.mapColor(MapColor.COLOR_LIGHT_BLUE)
-				.pushReaction(PushReaction.BLOCK)
+				.pushReaction(PushReaction.IMMOVEABLE)
 				.noOcclusion()
 				.isViewBlocking((_, _, _) -> false)
 				.isSuffocating((_, _, _) -> false)
@@ -74,11 +72,6 @@ public class QuestBarrierBlock extends BaseEntityBlock {
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(OPEN);
-	}
-
-	@Override
-	protected MapCodec<? extends QuestBarrierBlock> codec() {
-		return CODEC;
 	}
 
 	@Override
