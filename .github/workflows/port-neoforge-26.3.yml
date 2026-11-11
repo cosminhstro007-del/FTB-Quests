@@ -49,6 +49,9 @@ jobs:
         working-directory: _ftb-library
         run: bash ./gradlew :common:publishToMavenLocal :fabric:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
 
+      - name: Apply temporary FTB Teams network codec bridge
+        run: python3 tools/patch-ftb-teams-26.3.py _ftb-teams
+
       - name: Build and publish FTB Teams to local Maven
         working-directory: _ftb-teams
         run: bash ./gradlew :common:publishToMavenLocal :fabric:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
