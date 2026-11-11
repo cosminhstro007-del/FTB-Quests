@@ -53,7 +53,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import org.jspecify.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -623,11 +623,11 @@ public class ViewQuestPanel extends ModalPanel {
 			}
 		} else {
 			switch (key.event().key()) {
-				case GLFW.GLFW_KEY_PAGE_UP, GLFW.GLFW_KEY_LEFT -> {
+				case InputConstants.KEY_PAGEUP, InputConstants.KEY_LEFT -> {
 					setCurrentPage(Math.max(0, getCurrentPage() - 1));
 					refreshWidgets();
 				}
-				case GLFW.GLFW_KEY_PAGE_DOWN, GLFW.GLFW_KEY_RIGHT -> {
+				case InputConstants.KEY_PAGEDOWN, InputConstants.KEY_RIGHT -> {
 					setCurrentPage(Math.min(pageIndices.size() - 1, getCurrentPage() + 1));
 					refreshWidgets();
 				}
