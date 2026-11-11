@@ -1,0 +1,61 @@
+name: Experimental FTB Ranks NeoForge 26.3 build
+
+on:
+  push:
+    branches:
+      - ci/ftb-ranks-26.3
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      SNAPSHOT: 'true'
+    steps:
+      - name: Checkout CI configuration
+        uses: actions/checkout@v4
+
+      - name: Checkout FTB Library NeoForge 26.3
+        uses: actions/checkout@v4
+        with:
+          repository: FTBTeam/FTB-Library
+          ref: feature/26.3
+          path: _ftb-library
+
+      - name: Checkout FTB Ranks NeoForge 26.3
+        uses: actions/checkout@v4
+        with:
+          repository: FTBTeam/FTB-Ranks
+          ref: feature/26.3
+          path: _ftb-ranks
+
+      - name: Install Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Configure Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build FTB Library SNAPSHOT for Ranks dependencies
+        working-directory: _ftb-library
+        run: bash ./gradlew :common:publishToMavenLocal :fabric:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --console=plain --stacktrace
+
+      - name: Compile FTB Ranks 26.3 NeoForge
+        working-directory: _ftb-ranks
+        run: bash ./gradlew :neoforge:classes :neoforge:jar --no-daemon --console=plain --stacktrace
+
+      - name: Upload experimental FTB Ranks and FTB Library JARs
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ftb-ranks-and-library-neoforge-26.3-experimental
+          path: |
+            _ftb-ranks/neoforge/build/libs/*.jar
+            _ftb-library/neoforge/build/libs/*.jar
+          if-no-files-found: error
