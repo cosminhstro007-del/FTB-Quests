@@ -69,6 +69,15 @@ public class SelectQuestObjectScreen<T extends QuestObjectBase> extends Abstract
 	}
 
 	@Override
+    public String getFilterText(Widget widget) {
+        String label = super.getFilterText(widget);
+        if (widget instanceof SelectQuestObjectScreen<?>.QuestObjectButton button && button.object != null) {
+            return label + " " + button.object.getCodeString().toLowerCase();
+        }
+        return label;
+    }
+
+	@Override
 	public void addButtons(Panel panel) {
 		List<T> list = new ArrayList<>();
 
@@ -114,7 +123,7 @@ public class SelectQuestObjectScreen<T extends QuestObjectBase> extends Abstract
 		callback.save(true);
 	}
 
-	private class QuestObjectButton extends SimpleTextButton implements ExtendedSearch {
+	private class QuestObjectButton extends SimpleTextButton {
 		@Nullable
 		public final T object;
 
@@ -199,9 +208,5 @@ public class SelectQuestObjectScreen<T extends QuestObjectBase> extends Abstract
 			callback.save(changed);
 		}
 
-		@Override
-		public boolean extendedSearch(String filterText) {
-			return filterText.length() >= 5 && object != null && object.getCodeString().toLowerCase().contains(filterText);
-		}
 	}
 }
