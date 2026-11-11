@@ -29,7 +29,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -207,7 +207,7 @@ public class EditRewardTableScreen extends AbstractButtonListScreen {
 		public void addMouseOverText(TooltipList list) {
 			super.addMouseOverText(list);
 
-			if (isKeyDown(GLFW.GLFW_KEY_F1) || isShiftKeyDown() && isCtrlKeyDown()) {
+			if (isKeyDown(InputConstants.KEY_F1) || isShiftKeyDown() && isCtrlKeyDown()) {
 				list.add(Component.literal(wr.getReward().getCodeString()).withStyle(ChatFormatting.DARK_GRAY));
 			}
 

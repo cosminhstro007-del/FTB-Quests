@@ -241,7 +241,7 @@ public class QuestPanel extends Panel {
 	}
 
 	ContextMenuItem createResizeMenuItem(Movable movable) {
-		return new ContextMenuItem(Component.translatable("ftbquests.gui.resize"), Icons.RESIZE, _ -> resizeController.activate(movable));
+		return new ContextMenuItem(Component.translatable("ftbquests.gui.resize"), Icons.EXPAND, _ -> resizeController.activate(movable));
 	}
 
 	@Override

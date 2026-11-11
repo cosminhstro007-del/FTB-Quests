@@ -855,7 +855,11 @@ public abstract class BaseQuestFile extends QuestObject implements QuestFile {
 		ItemStack.OPTIONAL_STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, emergencyItems);
 		buffer.writeVarInt(emergencyItemsCooldown);
 		buffer.writeBoolean(defaultPerTeamReward);
-		buffer.writeMap(defaultPerTeamRewardByType, Identifier.STREAM_CODEC, ByteBufCodecs.BOOL);
+		buffer.writeVarInt(defaultPerTeamRewardByType.size());
+        defaultPerTeamRewardByType.forEach((key, value) -> {
+            Identifier.STREAM_CODEC.encode(buffer, key);
+            ByteBufCodecs.BOOL.encode(buffer, value);
+        });
 		buffer.writeBoolean(defaultTeamConsumeItems);
 		RewardAutoClaim.NAME_MAP_NO_DEFAULT.write(buffer, defaultRewardAutoClaim);
 		buffer.writeUtf(defaultQuestShape, Short.MAX_VALUE);
@@ -885,7 +889,11 @@ public abstract class BaseQuestFile extends QuestObject implements QuestFile {
 		emergencyItemsCooldown = Math.max(buffer.readVarInt(), 0);
 		defaultPerTeamReward = buffer.readBoolean();
 		defaultPerTeamRewardByType.clear();
-		defaultPerTeamRewardByType.putAll(buffer.readMap(Identifier.STREAM_CODEC, ByteBufCodecs.BOOL));
+		int rewardDefaultsCount = buffer.readVarInt();
+        if (rewardDefaultsCount < 0 || rewardDefaultsCount > 65535) throw new IllegalArgumentException("Invalid reward defaults map size: " + rewardDefaultsCount);
+        for (int i = 0; i < rewardDefaultsCount; i++) {
+            defaultPerTeamRewardByType.put(Identifier.STREAM_CODEC.decode(buffer), ByteBufCodecs.BOOL.decode(buffer));
+        }
 		defaultTeamConsumeItems = buffer.readBoolean();
 		defaultRewardAutoClaim = RewardAutoClaim.NAME_MAP_NO_DEFAULT.read(buffer);
 		defaultQuestShape = buffer.readUtf(Short.MAX_VALUE);

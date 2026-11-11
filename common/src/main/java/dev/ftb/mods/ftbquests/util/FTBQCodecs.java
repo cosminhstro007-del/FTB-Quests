@@ -36,8 +36,18 @@ public class FTBQCodecs {
             = Codec.LONG.listOf().xmap(LongOpenHashSet::new, LongArrayList::new);
 
     public static final StreamCodec<FriendlyByteBuf, LongSet> LONG_SET_STREAM_CODEC = StreamCodec.of(
-            (output, value) -> output.writeCollection(value, FriendlyByteBuf::writeLong),
-            input -> input.readCollection(LongOpenHashSet::new, FriendlyByteBuf::readLong)
+            (output, value) -> {
+                if (value.size() > 65535) throw new IllegalArgumentException("Long set too large");
+                output.writeVarInt(value.size());
+                for (long entry : value) output.writeLong(entry);
+            },
+            input -> {
+                int count = input.readVarInt();
+                if (count < 0 || count > 65535) throw new IllegalArgumentException("Invalid long set size: " + count);
+                LongSet result = new LongOpenHashSet(count);
+                for (int i = 0; i < count; i++) result.add(input.readLong());
+                return result;
+            }
     );
 
     public static final StreamCodec<ByteBuf, List<Long>> LONG_LIST_STREAM_CODEC

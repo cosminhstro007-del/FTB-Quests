@@ -1,6 +1,5 @@
 package dev.ftb.mods.ftbquests.block;
 
-import com.mojang.serialization.MapCodec;
 import dev.ftb.mods.ftbquests.FTBQuestsPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -8,7 +7,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
 public class StageBarrierBlock extends QuestBarrierBlock {
-	private static final MapCodec<StageBarrierBlock> CODEC = simpleCodec(StageBarrierBlock::new);
 
 	public StageBarrierBlock(Properties props) {
 		super(props);
@@ -18,10 +16,5 @@ public class StageBarrierBlock extends QuestBarrierBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
 		return FTBQuestsPlatform.get().stageBarrierBlockEntityProvider().create(blockPos, blockState);
-	}
-
-	@Override
-	protected MapCodec<StageBarrierBlock> codec() {
-		return CODEC;
 	}
 }

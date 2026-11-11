@@ -10,6 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Util;
+import net.minecraft.util.Prediction;
 
 import java.util.UUID;
 
@@ -35,7 +36,7 @@ public record GetEmergencyItemsMessage() implements CustomPacketPayload {
 
 			if (delta >= sqf.getEmergencyItemsCooldown() * 1000L) {
 				ServerQuestFile.getInstance().getEmergencyItems()
-						.forEach(stack -> player.getInventory().placeItemBackInInventory(stack.copy()));
+						.forEach(stack -> player.getInventory().placeItemBackInInventory(stack.copy(), Prediction.SERVER_ONLY));
 				lastItemsGot.put(player.getUUID(), now);
 			}
 		});

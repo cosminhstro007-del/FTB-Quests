@@ -31,6 +31,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
+import org.joml.Matrix4f;
 
 public class TaskScreenRenderer implements BlockEntityRenderer<TaskScreenBlockEntity, TaskScreenRenderState> {
     public static final Identifier INPUT_ONLY_TEXTURE = FTBQuestsAPI.id("tasks/input_only");
@@ -100,8 +101,8 @@ public class TaskScreenRenderer implements BlockEntityRenderer<TaskScreenBlockEn
         poseStack.pushPose();
 
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
-        poseStack.mulPose(Axis.YP.rotationDegrees(renderState.rotationAngle));
+        poseStack.mulPose(new Matrix4f().rotate(Axis.ZP.rotationDegrees(180f)));
+        poseStack.mulPose(new Matrix4f().rotate(Axis.YP.rotationDegrees(renderState.rotationAngle)));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
 
         int screenSize = renderState.screenSize;
@@ -160,7 +161,7 @@ public class TaskScreenRenderer implements BlockEntityRenderer<TaskScreenBlockEn
         poseStack.pushPose();
         poseStack.translate(0.5D, iconY, -0.0D);
         poseStack.scale(renderState.isInputOnly ? 0.5f : 0.45f, renderState.isInputOnly ? 0.5f : 0.45f, 1f);//0.2f * Math.max(3, size));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
+        poseStack.mulPose(new Matrix4f().rotate(Axis.ZP.rotationDegrees(180f)));
 
         if (renderState.resourceSprite != null && renderState.overlaySprite != null) {
             // min z-scale multiplier of 3 is anti z-fighting measure

@@ -23,6 +23,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -92,7 +93,7 @@ public class EditableIconItemStack extends EditableItemStack {
 				new ContextMenuItem(Component.translatable("ftbquests.gui.icon_menu.image"),
 						Icons.ART, b -> openImageSelector(callback)),
 				new ContextMenuItem(Component.translatable("ftbquests.gui.icon_menu.entity"),
-						EntityIconLoader.getIcon(EntityType.PIG), b -> openEntitySelector(callback))
+						EntityIconLoader.getIcon(EntityTypes.PIG), b -> openEntitySelector(callback))
 		);
 	}
 }

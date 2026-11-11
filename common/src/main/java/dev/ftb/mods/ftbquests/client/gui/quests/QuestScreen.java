@@ -105,10 +105,10 @@ public class QuestScreen extends BaseScreen {
 	public static QuestScreen reopen(ClientQuestFile file, PersistedData persistedData) {
 		double mx = Minecraft.getInstance().mouseHandler.xpos();
 		double my = Minecraft.getInstance().mouseHandler.ypos();
-		Minecraft.getInstance().setScreen(null);  // ensures prevScreen is null, so we can close correctly
+		Minecraft.getInstance().gui.setScreen(null);  // ensures prevScreen is null, so we can close correctly
 		QuestScreen questScreen = new QuestScreen(file, persistedData);
 		questScreen.openGui();
-		InputConstants.grabOrReleaseMouse(Minecraft.getInstance().getWindow(), GLFW.GLFW_CURSOR_NORMAL, mx, my);
+		InputConstants.releaseMouse(Minecraft.getInstance().getWindow(), mx, my);
 		return questScreen;
 	}
 
@@ -506,7 +506,7 @@ public class QuestScreen extends BaseScreen {
 
 		if (toCopy != null) {
 			toCopy.copyToClipboard();
-			Minecraft.getInstance().getToastManager().addToast(new CustomToast(Component.translatable("ftbquests.quest.copied"),
+			Minecraft.getInstance().gui.toastManager().addToast(new CustomToast(Component.translatable("ftbquests.quest.copied"),
 					Icons.INFO, Component.literal(toCopy.getTitle().getString())));
 			return true;
 		}

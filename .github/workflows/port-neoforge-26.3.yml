@@ -1,0 +1,68 @@
+name: Experimental NeoForge 26.3 compile
+
+on:
+  push:
+    branches:
+      - port/neoforge-26.3
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  neoforge-compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      SNAPSHOT: 'true'
+    steps:
+      - name: Checkout FTB Quests port
+        uses: actions/checkout@v4
+
+      - name: Checkout FTB Library 26.3 sources
+        uses: actions/checkout@v4
+        with:
+          repository: FTBTeam/FTB-Library
+          ref: feature/26.3
+          path: _ftb-library
+
+      - name: Checkout FTB Teams 26.3 sources
+        uses: actions/checkout@v4
+        with:
+          repository: FTBTeam/FTB-Teams
+          ref: feature/26.3
+          path: _ftb-teams
+
+      - name: Install Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Configure Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Update FTB Library Gradle wrapper for Loom 1.17
+        run: sed -i 's/gradle-9.4.0-bin.zip/gradle-9.5.0-bin.zip/' _ftb-library/gradle/wrapper/gradle-wrapper.properties
+
+      - name: Build and publish FTB Library to local Maven
+        working-directory: _ftb-library
+        run: bash ./gradlew :common:publishToMavenLocal :fabric:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
+
+      - name: Apply temporary FTB Teams network codec bridge
+        run: python3 tools/patch-ftb-teams-26.3.py _ftb-teams
+
+      - name: Build and publish FTB Teams to local Maven
+        working-directory: _ftb-teams
+        run: bash ./gradlew :common:publishToMavenLocal :fabric:publishToMavenLocal :neoforge:publishToMavenLocal --no-daemon --stacktrace --console=plain
+
+      - name: Compile FTB Quests for NeoForge 26.3
+        run: bash ./gradlew :neoforge:classes :neoforge:jar --no-daemon --stacktrace --console=plain
+
+      - name: Upload experimental JAR
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ftb-quests-neoforge-26.3-experimental
+          path: neoforge/build/libs/*.jar
+          if-no-files-found: error
