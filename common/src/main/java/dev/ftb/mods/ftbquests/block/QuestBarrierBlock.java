@@ -56,7 +56,7 @@ public class QuestBarrierBlock extends BaseEntityBlock {
 				.mapColor(MapColor.COLOR_LIGHT_BLUE)
 				.pushReaction(PushReaction.IMMOVEABLE)
 				.noOcclusion()
-				.isViewBlocking((_, _, _) -> false)
+				.isViewBlocking((_, _, _, _) -> false)
 				.isSuffocating((_, _, _) -> false)
 				.strength(-1, 6000000F)
 				.lightLevel(_ -> 3)
